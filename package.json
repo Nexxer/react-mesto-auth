@@ -1,5 +1,5 @@
 {
-  "homepage": "https://nexxer.github.io/mesto-react/",
+  "homepage": "https://nexxer.github.io/react-mesto-auth/",
   "name": "mesto-react",
   "version": "1.1.4",
   "private": true,
@@ -19,6 +19,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
