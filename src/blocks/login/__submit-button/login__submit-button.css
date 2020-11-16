@@ -1,0 +1,21 @@
+.login__submit-button {
+  max-width: 358px;
+  width: 100%;
+  height: 50px;
+  background-color: #fff;
+  border-radius: 2px;
+  border: none;
+  color: #000;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  cursor: pointer;
+  transition-duration: 0.8s;
+  transition-property: background-color;
+  margin-top: 186px;
+  padding: 0;
+}
+
+.login__submit-button:hover {
+  background-color: rgba(255, 255, 255, 0.85);
+}

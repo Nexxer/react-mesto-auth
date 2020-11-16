@@ -1,0 +1,10 @@
+.login__link_text {
+  padding: 0;
+  margin: 15px 0 0;
+  transition-duration: 0.8s;
+  transition-property: opacity;
+}
+
+.login__link_text:hover {
+  opacity: 0.6;
+}

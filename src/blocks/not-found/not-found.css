@@ -1,0 +1,13 @@
+@import url('./__title/not-found__title.css');
+@import url('./__text/not-found__text.css');
+.not-found {
+  text-align: center;
+  color: rgb(170, 170, 170);
+  font-size: 30px;
+}
+
+@media screen and (max-width: 450px) {
+  .not-found {
+    font-size: 20px;
+  }
+}
