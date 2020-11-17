@@ -17,7 +17,7 @@ function PopupWithForm(props) {
           <button
             type="submit"
             className="popup__button-save"
-          >Сохранить</button>
+  >{props.buttonText}</button>
         </form>
         <button
           className="popup__button-close"

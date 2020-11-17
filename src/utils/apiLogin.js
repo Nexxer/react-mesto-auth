@@ -9,15 +9,12 @@ export const registration = (email, password) => {
     body: JSON.stringify({ email, password }),
   })
     .then((res) => {
-      return res.json();
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(res.status)
     })
-    .then((res) => {
-      return res;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-}
+};
 
 export const onLogin = (email, password) => {
   return fetch(`${baseUrl}/signin`, {
@@ -28,16 +25,12 @@ export const onLogin = (email, password) => {
     body: JSON.stringify({ email, password }),
   })
     .then((res) => {
-      return res.json();
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(res.status)
     })
-    .then((res) => {
-      localStorage.setItem("jwt", res.token);
-      return res;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-}
+};
 
 export const getJWT = (jwt) => {
   return fetch(`${baseUrl}/users/me`, {
@@ -48,10 +41,9 @@ export const getJWT = (jwt) => {
     },
   })
     .then((res) => {
-      return res.json();
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(res.status)
     })
-    .then((data) => data)
-    .catch((error) => {
-      console.error(error);
-    });
 };

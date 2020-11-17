@@ -30,6 +30,7 @@ function EditProfilePopup(props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}
+      buttonText={props.buttonText}
     >
       <input
         id="profile-name"

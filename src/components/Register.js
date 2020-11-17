@@ -1,28 +1,28 @@
 import React from 'react';
 import { Link, useHistory } from "react-router-dom";
 import { ROUTES_MAP } from '../utils/routesMap';
-import { registration } from "./../utils/apiLogin";
 
-function Register({ registrationPopupOpen }) {
+function Register(props) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const history = useHistory();
+
+  const handleEmailChange = (evt) => {
+    setEmail(evt.target.value);
+  };
+
+  const handlePasswordChange = (evt) => {
+    setPassword(evt.target.value);
+  };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    registration(email, password)
-      .then((res) => {
-        if (res.data.email === email) {
-          registrationPopupOpen(res.data);
-          history.push("/signin");
-        } else {
-          registrationPopupOpen(res.data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    if (!email || !password) {
+      console.error("Введите данные");
+    }
+    props.onRegister(email, password);
+    setEmail("");
+    setPassword("");
+  }
 
   return (
     <div className="login">
@@ -36,7 +36,7 @@ function Register({ registrationPopupOpen }) {
           type="email"
           required={true}
           placeholder="Email"
-          onChange={(evt) => setEmail(evt.target.value)}
+          onChange={handleEmailChange}
 
         />
         <div className="login__input-box">
@@ -45,7 +45,7 @@ function Register({ registrationPopupOpen }) {
             type="password"
             required={true}
             placeholder="Пароль"
-            onChange={(evt) => setPassword(evt.target.value)}
+            onChange={handlePasswordChange}
           />
         </div>
         <button type="submit" className="login__submit-button">

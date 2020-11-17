@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 import { api } from '../utils/api';
-import { getJWT } from "./../utils/apiLogin";
+import { getJWT, onLogin, registration } from "./../utils/apiLogin";
 import CurrentUserContext from './../contexts/CurrentUserContext';
 import { ROUTES_MAP } from '../utils/routesMap';
 import Header from './Header'
@@ -21,7 +21,8 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(undefined);
+  const [isCardPopupOpen, setIsCardPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -41,6 +42,7 @@ function App() {
             history.push("/");
           } else {
             setLoggedIn(false);
+            history.push("/signin");
             localStorage.removeItem('jwt');
           }
         })
@@ -49,21 +51,6 @@ function App() {
         });
     }
   };
-
-  useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([values, card]) => {
-        setCurrentUser(values);
-        setCards(card);
-      })
-      .catch((err) => {
-        console.log(`Данные не получены. ${err}`);
-      })
-  }, []);
-
-  function handleLogin() {
-    setLoggedIn(true);
-  }
 
   function handleLogout() {
     setLoggedIn(false);
@@ -106,16 +93,17 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
+  function handleCardClick(card) {
+    setIsCardPopupOpen(true);
+    setSelectedCard(card);
+  }
+
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsRegisterPopupOpen(false);
-    setSelectedCard('');
-  }
-
-  function handleCardClick(card) {
-    setSelectedCard(card);
+    setIsCardPopupOpen(false);
   }
 
   function handleUpdateUser(info) {
@@ -155,10 +143,63 @@ function App() {
       })
   }
 
+  function handleLogin(email, password) {
+    onLogin(email, password)
+      .then((res) => {
+        if (res.token) {
+          setLoggedIn(true);
+          setUserMail(email);
+          history.push("/");
+        } else if (res.message) {
+          console.error(res.message)
+        }
+      })
+      .catch((err) => {
+        if (err === 400) {
+          console.log("Не передано одно из полей");
+        } else if (err === 401) {
+          console.log("Пользователь с email не найден");
+        } else {
+          console.log(`Ошибка: ${err}`);
+        }
+      });
+  };
+
+  function handleRegister(email, password) {
+    registration(email, password)
+      .then((res) => {
+        if (res.data.email === email) {
+          setIsRegisterPopupOpen(res.data);
+          history.push("/signin");
+        } else {
+          setIsRegisterPopupOpen(res.data);
+        }
+      })
+      .catch((err) => {
+        if (err === 401) {
+          console.log("Переданный токен некорректен");
+        } else {
+          console.log(`Ошибка: ${err}`);
+        }
+      });
+  };
+
   useEffect(() => {
     checkToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedIn]);
+  }, [history]);
+
+  useEffect(() => {
+    Promise.all([api.getUserInfo(), api.getInitialCards()])
+      .then(([values, card]) => {
+        setCurrentUser(values);
+        setCards(card);
+      })
+      .catch((err) => {
+        console.log(`Данные не получены. ${err}`);
+      })
+  }, []);
+
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -185,13 +226,13 @@ function App() {
 
             <Route path={ROUTES_MAP.SIGN_UP}>
               <Register
-                registrationPopupOpen={setIsRegisterPopupOpen}
+                onRegister={handleRegister}
               />
             </Route>
 
             <Route path={ROUTES_MAP.SIGN_IN}>
               <Login
-                handleLogin={handleLogin}
+                onLogin={handleLogin}
               />
             </Route>
 
@@ -206,23 +247,26 @@ function App() {
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
+            buttonText='Сохранить'
           />
 
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
+            buttonText='Сохранить'
           />
 
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
             onAddPlace={handleAddPlaceSubmit}
+            buttonText='Создать'
           />
 
           <ImagePopup
             card={selectedCard}
-            isOpen={selectedCard}
+            isOpen={isCardPopupOpen}
             onClose={closeAllPopups}
           />
 

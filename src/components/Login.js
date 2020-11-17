@@ -1,38 +1,26 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
-import { onLogin } from "./../utils/apiLogin";
 
-function Login({ handleLogin }) {
+function Login(props) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const history = useHistory();
+
+  const handleEmailChange = (evt) => {
+    setEmail(evt.target.value);
+  };
+
+  const handlePasswordChange = (evt) => {
+    setPassword(evt.target.value);
+  };
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-
     if (!email || !password) {
       console.error("Введите данные");
-    };
-
-    const clearForm = () => {
-      setEmail("");
-      setPassword("");
-    };
-
-    onLogin(email, password)
-      .then((res) => {
-        if (res.token) {
-          clearForm();
-          handleLogin();
-          history.push("/");
-        } else if (res.message) {
-          console.error(res.message)
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    }
+    props.onLogin(email, password);
+    setEmail("");
+    setPassword("");
+  }
 
   return (
     <div className="login">
@@ -45,7 +33,7 @@ function Login({ handleLogin }) {
           type="email"
           required={true}
           placeholder="Email"
-          onChange={(evt) => setEmail(evt.target.value)}
+          onChange={handleEmailChange}
         />
 
         <input
@@ -53,7 +41,7 @@ function Login({ handleLogin }) {
           type="password"
           required={true}
           placeholder="Пароль"
-          onChange={(evt) => setPassword(evt.target.value)}
+          onChange={handlePasswordChange}
         />
 
         <button type="submit" className="login__submit-button">
