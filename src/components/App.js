@@ -27,7 +27,8 @@ function App() {
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false);
-  const [userMail, setUserMail] = useState('TEST');
+  const [userMail, setUserMail] = useState('');
+  const [statusReg, setStatusReg] = useState(false)
 
   const history = useHistory();
 
@@ -168,9 +169,12 @@ function App() {
   function handleRegister(email, password) {
     registration(email, password)
       .then((res) => {
+        setIsRegisterPopupOpen(true);
         if (res.data.email === email) {
-          setIsRegisterPopupOpen(res.data);
+          setStatusReg(true)
           history.push("/signin");
+        } else {
+          setStatusReg(false)
         }
       })
       .catch((err) => {
@@ -272,6 +276,7 @@ function App() {
           <InfoTooltip
             isOpen={isRegisterPopupOpen}
             onClose={closeAllPopups}
+            status={statusReg}
           />
 
         </div>
