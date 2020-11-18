@@ -19,7 +19,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build public"
+    "deploy": "gh-pages -d build public",
+    "deploy-server": "npm run build && scp -r ./build/* nekker@130.193.56.68:/home/nekker/news-frontend"
   },
   "eslintConfig": {
     "extends": "react-app"

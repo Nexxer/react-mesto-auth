@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ROUTES_MAP } from '../utils/routesMap';
 
 function Register(props) {

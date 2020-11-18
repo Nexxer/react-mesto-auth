@@ -43,7 +43,6 @@ function App() {
           } else {
             setLoggedIn(false);
             history.push("/signin");
-            localStorage.removeItem('jwt');
           }
         })
         .catch((error) => {
@@ -149,6 +148,7 @@ function App() {
         if (res.token) {
           setLoggedIn(true);
           setUserMail(email);
+          localStorage.setItem("jwt", res.token);
           history.push("/");
         } else if (res.message) {
           console.error(res.message)
@@ -171,11 +171,10 @@ function App() {
         if (res.data.email === email) {
           setIsRegisterPopupOpen(res.data);
           history.push("/signin");
-        } else {
-          setIsRegisterPopupOpen(res.data);
         }
       })
       .catch((err) => {
+        setIsRegisterPopupOpen(true);
         if (err === 401) {
           console.log("Переданный токен некорректен");
         } else {
