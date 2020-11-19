@@ -2,7 +2,7 @@ class Api {
   constructor({ baseUrl, headers }) {
     this.url = baseUrl;
     this.headers = headers;
-  }
+  };
 
   getInitialCards() {
     return fetch(`${this.url}/cards`, {
@@ -10,7 +10,7 @@ class Api {
         authorization: this.headers.authorization,
       },
     }).then((res) => this._getResponseData(res));
-  }
+  };
 
   getUserInfo() {
     return fetch(`${this.url}/users/me`, {
@@ -18,7 +18,7 @@ class Api {
         authorization: this.headers.authorization,
       },
     }).then((res) => this._getResponseData(res));
-  }
+  };
 
   setUserInfo(info) {
     return fetch(`${this.url}/users/me`, {
@@ -30,7 +30,7 @@ class Api {
       }),
     })
       .then((res) => this._getResponseData(res));
-  }
+  };
 
   setNewAvatar(avatar) {
     return fetch(`${this.url}/users/me/avatar`, {
@@ -40,7 +40,7 @@ class Api {
         avatar: avatar,
       }),
     }).then((res) => this._getResponseData(res));
-  }
+  };
 
   postNewCard(card) {
     return fetch(`${this.url}/cards`, {
@@ -62,24 +62,6 @@ class Api {
     }).then((res) => this._getResponseData(res));
   };
 
-  // setLike(cardId) {
-  //   return fetch(`${this.url}/cards/likes/${cardId}`, {
-  //     method: "PUT",
-  //     headers: {
-  //       authorization: this.headers.authorization,
-  //     },
-  //   }).then((res) => this._getResponseData(res));
-  // };
-
-  // deleteLike(cardId) {
-  //   return fetch(`${this.url}/cards/likes/${cardId}`, {
-  //     method: "DELETE",
-  //     headers: {
-  //       authorization: this.headers.authorization,
-  //     },
-  //   }).then((res) => this._getResponseData(res));
-  // };
-
   changeLikeCardStatus(cardId, isLiked) {
     return fetch(`${this.url}/cards/likes/${cardId}`, {
       method: (isLiked ? "PUT" : "DELETE"),
@@ -95,7 +77,7 @@ class Api {
     }
     return Promise.reject(new Error(`Ошибка: ${res.status}`));
   };
-}
+};
 
 export const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-14',

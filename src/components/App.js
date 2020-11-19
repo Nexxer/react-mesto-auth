@@ -187,6 +187,15 @@ function App() {
       });
   };
 
+  function closeEsc(evt) {
+    if ((evt.key === 'Escape') && (isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isCardPopupOpen)) {
+      closeAllPopups();
+      console.log('WOW');
+    }
+  }
+
+  document.addEventListener('keydown', closeEsc);
+
   useEffect(() => {
     checkToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
